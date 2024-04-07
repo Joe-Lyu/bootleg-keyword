@@ -64,15 +64,20 @@ def format_game(hint_list):
 def make_guess(guess,hint_list,keyword):
     # guess: [number, letter]
     correct = False
+    guessed = False
     num, letter = guess
     num -= 1
+
+    if '_' not in hint_list[num][0] and '?' not in hint_list[num][0]:
+        guessed = True
+        return hint_list, correct, guessed
     hint_list[num][1] += 1
     if letter == keyword[num]:
         hint_list[num][0] = hint_list[num][0].replace('_', letter).replace('?', letter)
         correct = True
     else:
         hint_list[num][0] = hint_list[num][0].replace('_', '?')
-    return hint_list, correct
+    return hint_list, correct, guessed
 
 
 if __name__ == '__main__':

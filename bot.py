@@ -45,14 +45,16 @@ class KeywordBot(discord.Client):
                     return await message.reply('Quit session.')
                 guess = guess.content.lower().split(' ')
                 guess[0] = int(guess[0])
-                hint_list, correct = make_guess(guess, hint_list, keyword)
-                if correct:
+                hint_list, correct, guessed = make_guess(guess, hint_list, keyword)
+                if guessed:
+                    await message.reply("You have already guessed that letter correctly!")
+                elif correct:
                     await message.reply("**Correct** letter!")
                 else:
                     await message.reply("**Incorrect** letter!")
                 await message.reply(format_game(hint_list))
 
-            await message.reply(f"End of game. You made **{guesses}** guesses; the minimum number of guesses is 6.")
+            return await message.reply(f"End of game. You made **{guesses}** guesses; the minimum number of guesses is 6.")
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
