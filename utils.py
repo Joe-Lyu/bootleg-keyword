@@ -2,12 +2,13 @@ import random
 from get_answers import freq_list
 import re
 import os
-import multiprocessing as mp
 from tqdm import tqdm
 with open('keyword_answers.txt','r') as f:
     keyword_answers = f.read().split('\n')
 
 hints = freq_list[:5000]
+
+NYA_FREQ = 0.1
 
 def generate_keyword_game(difficulty = 'normal'):
     keyword = random.choice(keyword_answers)
@@ -35,6 +36,9 @@ def get_hint(letter, difficulty='init'):
     else:
         with open(f'candidates/letter_hint_{letter}.txt','r') as f:
             candidates = f.read().split('\n')
+    if letter in 'nya':
+        if random.random() <= NYA_FREQ:
+            return 'nya' # Althea's Bribe
     if difficulty == 'easy':
         return random.choice(candidates[len(candidates)//8:])
     elif difficulty == 'normal':

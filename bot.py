@@ -17,7 +17,7 @@ class KeywordBot(discord.Client):
             await message.reply("Choose your difficulty: easy, normal, hard or random")
             def is_difficulty(msg):
                 if msg.content.lower() == '!quit':
-                    return True
+                    return msg.author == message.author
                 return msg.content.lower() in ['easy','normal','hard','random'] and msg.author == message.author
             difficulty = await self.wait_for('message', check=is_difficulty, timeout=600)
             if difficulty.content == '!quit':
@@ -31,7 +31,7 @@ class KeywordBot(discord.Client):
             def is_guess(msg):
                 guess = msg.content.lower()
                 if guess == '!quit' or re.match(r'^[a-zA-Z]{6}$', guess):
-                    return True
+                    return msg.author == message.author
                 try:
                     num, letter = guess.split(' ')
                     num = int(num)
@@ -49,7 +49,7 @@ class KeywordBot(discord.Client):
                     guesses -= 1
                     for number, letter in enumerate(guess.content.lower()):
                         hint_list, correct, guessed = make_guess([number+1,letter], hint_list, keyword)
-                        if correct and not guessed:
+                        if not guessed:
                             guesses += 1
                     if keyword == guess.content:
                         await message.reply(format_game(hint_list))
